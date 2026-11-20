@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caíque Araújo — Endocrinologia no Agreste</title>
+<meta name="description" content="Endocrinologia com ciência, tempo e sotaque do Agreste. Consultório em Caruaru e teleconsulta para todo o Agreste pernambucano.">
+<meta name="theme-color" content="#1b1512">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --papel:#f3e9d6; --papel2:#eadcc2; --tinta:#1b1512; --barro:#c2512f; --sol:#e3a02b; --cacto:#2c5a4a; --noite:#15112a;
+  --serif:"Fraunces", "Iowan Old Style", Georgia, serif; --sans:"Instrument Sans", system-ui, sans-serif;
+  --ease:cubic-bezier(.2,.7,.1,1);
+}
+* { box-sizing: border-box; margin: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body { font-family: var(--sans); background: var(--papel); color: var(--tinta); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+::selection { background: var(--barro); color: var(--papel); }
+a { color: inherit; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--sol); outline-offset: 4px; border-radius: 4px; }
+.wrap { width: min(1280px, 100% - 48px); margin-inline: auto; }
+.rot { font-size: .74rem; letter-spacing: .22em; text-transform: uppercase; font-weight: 600; display: flex; align-items: center; gap: 12px; }
+.rot::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 350; line-height: 1; letter-spacing: -.025em; }
+h2 { font-size: clamp(2.4rem, 6.5vw, 5.6rem); }
+h2 em, h1 em { font-style: italic; font-weight: 300; color: var(--barro); }
+section { padding: clamp(80px, 12vw, 170px) 0; position: relative; }
+
+/* granulado de papel */
+body::after { content: ""; position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: .09; mix-blend-mode: multiply;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+#prog { position: fixed; top: 0; left: 0; height: 3px; width: 100%; background: var(--barro); transform-origin: 0 50%; transform: scaleX(0); z-index: 100; }
+#cur { position: fixed; top: 0; left: 0; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--sol); mix-blend-mode: difference; pointer-events: none; z-index: 110; opacity: 0; transition: width .25s var(--ease), height .25s var(--ease), margin .25s var(--ease), opacity .3s; }
+#cur.on { opacity: 1; } #cur.big { width: 64px; height: 64px; margin: -32px 0 0 -32px; }
+
+/* cabeçalho */
+header { position: fixed; inset: 0 0 auto 0; z-index: 80; color: var(--hero-tinta, var(--tinta)); transition: background .4s, color .4s, box-shadow .4s; }
+header.solido { background: rgba(243,233,214,.86); backdrop-filter: blur(14px); color: var(--tinta); box-shadow: 0 1px 0 rgba(27,21,18,.12); }
+header .wrap { display: flex; align-items: center; justify-content: space-between; height: 76px; gap: 20px; }
+.marca { text-decoration: none; font-family: var(--serif); font-size: 1.3rem; letter-spacing: -.02em; display: flex; align-items: baseline; gap: 10px; }
+.marca i { font-weight: 300; } .marca small { font-family: var(--sans); font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; opacity: .7; }
+header nav { display: flex; gap: 30px; align-items: center; }
+header nav a { text-decoration: none; font-size: .9rem; font-weight: 500; position: relative; }
+header nav a:not(.pill)::after { content: ""; position: absolute; left: 0; bottom: -4px; width: 100%; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: 100% 50%; transition: transform .4s var(--ease); }
+header nav a:not(.pill):hover::after { transform: scaleX(1); transform-origin: 0 50%; }
+.pill { display: inline-flex; align-items: center; gap: 10px; padding: 13px 24px; border-radius: 999px; border: 1px solid currentColor; text-decoration: none; font-weight: 600; font-size: .9rem; background: none; transition: background .3s, color .3s, border-color .3s; will-change: transform; }
+.pill:hover { background: var(--barro); border-color: var(--barro); color: var(--papel); }
+.pill.cheio { background: var(--barro); border-color: var(--barro); color: var(--papel); }
+.pill.cheio:hover { background: var(--tinta); border-color: var(--tinta); }
+.pill svg { width: 14px; height: 14px; transition: transform .3s var(--ease); } .pill:hover svg { transform: translate(3px,-3px); }
+
+/* hero: o céu do Agreste muda com a hora */
+.hero { min-height: 100svh; padding: 0; display: flex; overflow: hidden; color: var(--hero-tinta); background: linear-gradient(var(--ceu1), var(--ceu2) 55%, var(--ceu3)); transition: color .8s; }
+.hero[data-ceu="aurora"] { --ceu1:#f3b98a; --ceu2:#f6d9ae; --ceu3:#f3e9d6; --astro:#e8643a; --ay:430px; --s1:#c98a5a; --s2:#9a5234; --s3:#3a2620; --hero-tinta:#1b1512; --est:0; }
+.hero[data-ceu="dia"]    { --ceu1:#9fd0dc; --ceu2:#d6e8dc; --ceu3:#f3e9d6; --astro:#f2b53a; --ay:120px; --s1:#cf9a62; --s2:#a85f38; --s3:#2c5a4a; --hero-tinta:#1b1512; --est:0; }
+.hero[data-ceu="poente"] { --ceu1:#2e1c4a; --ceu2:#c2512f; --ceu3:#f0ab55; --astro:#ffd98a; --ay:470px; --s1:#7c3a3c; --s2:#4b2238; --s3:#1c1126; --hero-tinta:#f6ecd9; --est:.35; }
+.hero[data-ceu="noite"]  { --ceu1:#0b0a1c; --ceu2:#1f1842; --ceu3:#3a2a5c; --astro:#f3e9d6; --ay:150px; --s1:#2b2452; --s2:#1b1738; --s3:#0b0a1c; --hero-tinta:#f3e9d6; --est:1; }
+.cena { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cena * { transition: fill .9s, stroke .9s, opacity .9s; }
+#astro { fill: var(--astro); transform: translateY(var(--ay)); transition: transform 1.6s var(--ease), fill .9s; filter: drop-shadow(0 0 60px var(--astro)); }
+#estrelas { opacity: var(--est); fill: #fff; }
+.s1 { fill: var(--s1); } .s2 { fill: var(--s2); } .s3 { fill: var(--s3); }
+.mand { stroke: var(--s3); fill: none; stroke-width: 15; stroke-linecap: round; stroke-linejoin: round; }
+.mand.longe { stroke: var(--s2); }
+.cam { transition: transform .5s var(--ease); will-change: transform; }
+.hero-txt { position: relative; z-index: 2; align-self: flex-start; padding-top: clamp(120px, 19vh, 210px); padding-bottom: 300px; }
+.hero h1 { font-size: clamp(3.1rem, 10.5vw, 10.5rem); margin: 26px 0 30px; max-width: 11ch; }
+.hero h1 em { color: inherit; }
+.hero h1 .l { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
+.hero h1 .l span { display: block; }
+.js .hero h1 .l span { transform: translateY(110%); animation: sobe 1.2s var(--ease) forwards; }
+.js .hero h1 .l:nth-child(2) span { animation-delay: .12s; } .js .hero h1 .l:nth-child(3) span { animation-delay: .24s; }
+@keyframes sobe { to { transform: none; } }
+.hero p.sub { max-width: 30em; font-size: clamp(1rem, 1.4vw, 1.2rem); margin-bottom: 34px; }
+.hero .acoes { display: flex; gap: 14px; flex-wrap: wrap; }
+.hora { position: absolute; z-index: 3; right: 24px; bottom: 24px; display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 18px; border-radius: 999px; background: rgba(27,21,18,.55); color: #f3e9d6; backdrop-filter: blur(10px); font-size: .82rem; }
+.hora b { font-variant-numeric: tabular-nums; font-weight: 600; }
+.hora button { border: 0; border-radius: 999px; background: #f3e9d6; color: #1b1512; padding: 7px 14px; font-size: .78rem; font-weight: 600; }
+
+/* letreiro */
+.letreiro { background: var(--tinta); color: var(--papel); padding: 22px 0; overflow: hidden; white-space: nowrap; }
+.letreiro div { display: inline-block; animation: corre 38s linear infinite; font-family: var(--serif); font-size: clamp(1.3rem, 2.6vw, 2.1rem); font-style: italic; font-weight: 300; }
+.letreiro span { margin: 0 26px; } .letreiro span:nth-child(even) { color: var(--sol); font-style: normal; font-size: .7em; }
+@keyframes corre { to { transform: translateX(-50%); } }
+
+/* manifesto */
+.manifesto p.g { font-family: var(--serif); font-weight: 350; font-size: clamp(1.8rem, 4.6vw, 4.2rem); line-height: 1.14; letter-spacing: -.02em; margin-top: 40px; max-width: 24em; }
+.manifesto .w { opacity: .14; transition: opacity .35s; } .manifesto .w.on { opacity: 1; }
+.numeros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 90px; border-top: 1px solid rgba(27,21,18,.2); }
+.numeros div { padding-top: 22px; } .numeros b { font-family: var(--serif); font-weight: 300; font-size: clamp(2.6rem, 6vw, 5rem); display: block; line-height: 1; color: var(--barro); }
+.numeros span { font-size: .92rem; opacity: .75; display: block; margin-top: 10px; max-width: 22em; }
+
+/* áreas */
+.areas { background: var(--papel2); }
+.lista { margin-top: 60px; border-top: 1px solid rgba(27,21,18,.25); }
+.item { display: grid; grid-template-columns: 90px 1fr 1.1fr 40px; gap: 24px; align-items: center; padding: 30px 0; border-bottom: 1px solid rgba(27,21,18,.25); position: relative; transition: padding .5s var(--ease), color .4s; }
+.item::before { content: ""; position: absolute; inset: 0 -24px; background: var(--tinta); transform: scaleY(0); transform-origin: 50% 100%; transition: transform .5s var(--ease); z-index: 0; border-radius: 6px; }
+.item > * { position: relative; z-index: 1; }
+.item:hover, .item:focus-within { color: var(--papel); padding-left: 12px; } .item:hover::before, .item:focus-within::before { transform: scaleY(1); }
+.item .n { font-size: .8rem; letter-spacing: .2em; opacity: .6; }
+.item h3 { font-size: clamp(1.7rem, 3.6vw, 3.1rem); }
+.item p { font-size: .98rem; opacity: .8; max-width: 34em; }
+.item .seta { width: 26px; height: 26px; transition: transform .5s var(--ease); color: var(--sol); } .item:hover .seta { transform: rotate(45deg); }
+
+/* mapa do corpo */
+.corpo { background: var(--noite); color: var(--papel); }
+.corpo h2 em { color: var(--sol); }
+.corpo .gr { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-top: 50px; }
+.fig { width: 100%; max-width: 420px; margin: auto; display: block; overflow: visible; }
+.fig .tr { fill: none; stroke: rgba(243,233,214,.35); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.fig .eixo { stroke: var(--sol); stroke-width: 1; stroke-dasharray: 3 7; opacity: .6; animation: fluxo 2.4s linear infinite; }
+@keyframes fluxo { to { stroke-dashoffset: -20; } }
+.gl { cursor: pointer; } .gl circle.p { fill: var(--sol); transition: r .3s var(--ease), fill .3s; }
+.gl circle.h { fill: none; stroke: var(--sol); stroke-width: 1; opacity: .5; transform-box: fill-box; transform-origin: center; animation: pulso 2.6s ease-out infinite; }
+.gl[aria-pressed="true"] circle.p { fill: var(--barro); r: 10; } .gl:hover circle.p { r: 9; }
+.gl text { fill: var(--papel); font-family: var(--sans); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .55; transition: opacity .3s; }
+.gl[aria-pressed="true"] text, .gl:hover text { opacity: 1; }
+@keyframes pulso { from { transform: scale(1); opacity: .7; } to { transform: scale(3.4); opacity: 0; } }
+.painel { min-height: 300px; }
+.painel .k { color: var(--sol); font-size: .78rem; letter-spacing: .2em; text-transform: uppercase; }
+.painel h3 { font-size: clamp(2.2rem, 4.6vw, 4rem); margin: 14px 0 20px; }
+.painel p { opacity: .8; max-width: 32em; font-size: 1.05rem; }
+.painel ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+.painel li { border: 1px solid rgba(243,233,214,.3); border-radius: 999px; padding: 7px 15px; font-size: .84rem; }
+.painel.troca > * { animation: entra .6s var(--ease) both; } .painel.troca > :nth-child(2) { animation-delay: .05s; } .painel.troca > :nth-child(3) { animation-delay: .1s; } .painel.troca > :nth-child(4) { animation-delay: .15s; }
+@keyframes entra { from { opacity: 0; transform: translateY(18px); } }
+
+/* ferramentas */
+.ferr .gr { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 56px; }
+.cx { background: #fbf5e8; border: 1px solid rgba(27,21,18,.14); border-radius: 28px; padding: clamp(26px, 4vw, 46px); box-shadow: 0 40px 80px -50px rgba(27,21,18,.5); }
+.cx h3 { font-size: 2rem; margin-bottom: 6px; } .cx > p { opacity: .7; font-size: .95rem; margin-bottom: 26px; }
+.campos { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.campos label, .cx label { font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 600; display: grid; gap: 8px; }
+.cx input { font: 400 1.5rem var(--serif); padding: 12px 0; border: 0; border-bottom: 1px solid rgba(27,21,18,.35); background: none; color: inherit; width: 100%; border-radius: 0; }
+.cx input:focus { outline: 0; border-color: var(--barro); box-shadow: 0 1px 0 var(--barro); }
+.saida { margin-top: 30px; display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.saida b { font: 300 clamp(3.4rem, 7vw, 5.4rem)/1 var(--serif); color: var(--barro); font-variant-numeric: tabular-nums; }
+.saida span { font-size: .95rem; font-weight: 600; }
+.regua { position: relative; height: 8px; border-radius: 99px; margin-top: 22px; background: linear-gradient(90deg, #6aa7b8 0 14%, var(--cacto) 14% 40%, var(--sol) 40% 60%, var(--barro) 60% 80%, #7a2418 80%); }
+.regua i { position: absolute; top: -7px; left: 0; width: 4px; height: 22px; background: var(--tinta); border-radius: 4px; margin-left: -2px; transition: left .7s var(--ease); }
+.nota { font-size: .8rem; opacity: .6; margin-top: 22px; }
+
+/* agreste */
+.agreste { background: var(--cacto); color: var(--papel); }
+.agreste h2 em { color: var(--sol); }
+.agreste .gr { display: grid; grid-template-columns: .9fr 1.1fr; gap: 50px; align-items: center; }
+.agreste p.t { opacity: .85; margin-top: 26px; max-width: 30em; font-size: 1.05rem; }
+.const { width: 100%; overflow: visible; }
+.const line { stroke: rgba(243,233,214,.3); stroke-width: 1; stroke-dasharray: 2 6; transition: stroke .3s; }
+.const g.c circle { fill: var(--papel); transition: r .3s var(--ease), fill .3s; }
+.const g.c text { fill: var(--papel); font-family: var(--sans); font-size: 12px; opacity: .75; transition: opacity .3s; }
+.const g.c:hover circle { r: 8; fill: var(--sol); } .const g.c:hover text { opacity: 1; }
+.const .sede circle { fill: var(--sol); } .const .sede text { font-family: var(--serif); font-size: 26px; font-style: italic; opacity: 1; }
+.const .anel { fill: none; stroke: var(--sol); opacity: .5; transform-box: fill-box; transform-origin: center; animation: pulso 3s ease-out infinite; }
+
+/* agendar */
+.agendar { background: var(--tinta); color: var(--papel); }
+.agendar h2 em { color: var(--sol); }
+.conc { margin-top: 56px; display: grid; grid-template-columns: 1.3fr .7fr; gap: 40px; align-items: start; }
+.passo { border-top: 1px solid rgba(243,233,214,.2); padding: 26px 0 30px; }
+.passo h4 { font-size: .74rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; opacity: .6; margin-bottom: 16px; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { border: 1px solid rgba(243,233,214,.35); background: none; border-radius: 999px; padding: 11px 20px; font-size: .95rem; transition: background .3s, color .3s, border-color .3s, transform .3s var(--ease); }
+.chip:hover { border-color: var(--papel); transform: translateY(-2px); }
+.chip[aria-pressed="true"] { background: var(--papel); color: var(--tinta); border-color: var(--papel); }
+.recibo { position: sticky; top: 100px; background: var(--papel); color: var(--tinta); border-radius: 24px; padding: 30px; }
+.recibo h3 { font-size: 1.7rem; margin-bottom: 18px; }
+.recibo dl { display: grid; gap: 12px; margin-bottom: 26px; }
+.recibo dl div { display: flex; justify-content: space-between; gap: 14px; border-bottom: 1px dashed rgba(27,21,18,.3); padding-bottom: 10px; font-size: .95rem; }
+.recibo dt { opacity: .6; } .recibo dd { margin: 0; font-weight: 600; text-align: right; }
+.recibo .pill { width: 100%; justify-content: center; }
+.recibo small { display: block; margin-top: 14px; font-size: .78rem; opacity: .65; }
+
+footer { background: var(--tinta); color: var(--papel); padding: 60px 0 30px; border-top: 1px solid rgba(243,233,214,.15); overflow: hidden; }
+footer .big { font-family: var(--serif); font-weight: 300; font-style: italic; font-size: clamp(3.4rem, 15vw, 15rem); line-height: .9; letter-spacing: -.04em; white-space: nowrap; color: var(--barro); }
+footer .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin: 50px 0 40px; font-size: .95rem; }
+footer h5 { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; opacity: .55; margin-bottom: 12px; font-weight: 600; }
+footer .fim { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: .78rem; opacity: .55; border-top: 1px solid rgba(243,233,214,.15); padding-top: 22px; }
+
+.js .rv { opacity: 0; transform: translateY(40px); transition: opacity 1s var(--ease), transform 1s var(--ease); }
+.js .rv.on { opacity: 1; transform: none; }
+
+@media (max-width: 900px) {
+  header nav a:not(.pill) { display: none; }
+  .marca small { display: none; }
+  .corpo .gr, .ferr .gr, .agreste .gr, .conc, footer .cols { grid-template-columns: 1fr; }
+  .numeros { grid-template-columns: 1fr; margin-top: 60px; }
+  .item { grid-template-columns: 44px 1fr; gap: 6px 14px; padding: 24px 0; } .item p { grid-column: 2; } .item .seta { display: none; }
+  .hero-txt { padding-bottom: 240px; } .hora span.lbl { display: none; }
+  .recibo { position: static; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; } .js .rv, .js .hero h1 .l span { opacity: 1; transform: none; } .manifesto .w { opacity: 1; }
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<div id="cur" aria-hidden="true"></div>
+
+<header id="topo-h">
+  <div class="wrap">
+    <a class="marca" href="#topo"><span>Caíque <i>Araújo</i></span><small>Endocrinologia</small></a>
+    <nav>
+      <a href="#areas">Áreas</a><a href="#corpo">O corpo</a><a href="#ferramentas">Ferramentas</a><a href="#agreste">O Agreste</a>
+      <a class="pill mag" href="#agendar">Agendar</a>
+    </nav>
+  </div>
+</header>
+
+<main id="topo">
+<section class="hero" id="hero" data-ceu="dia">
+  <svg class="cena" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <g id="estrelas"></g>
+    <g class="cam" data-p="8"><circle id="astro" cx="1040" cy="170" r="74"/></g>
+    <g class="cam" data-p="14"><path class="s1" d="M-60 610C200 520 380 565 560 540S900 465 1100 530s260 30 400-14V960H-60Z"/></g>
+    <g class="cam" data-p="26">
+      <path class="s2" d="M-60 700C180 640 360 705 600 662s380-62 600 8 200 22 300-12V960H-60Z"/>
+      <path class="mand longe" transform="translate(1010 652) scale(.55)" d="M0 0V-130M0-50H-30V-95M0-74H28V-120"/>
+      <path class="mand longe" transform="translate(330 668) scale(.45)" d="M0 0V-130M0-50H-30V-95M0-74H28V-120"/>
+    </g>
+    <g class="cam" data-p="44">
+      <path class="s3" d="M-80 800C240 742 480 806 760 772s430-34 760 22V980H-80Z"/>
+      <path class="mand" transform="translate(180 790) scale(1.25)" d="M0 0V-130M0-50H-30V-95M0-74H28V-120"/>
+      <path class="mand" transform="translate(560 786) scale(.8)" d="M0 0V-120M0-44H26V-88M0-66H-28V-104"/>
+      <path class="mand" transform="translate(905 772) scale(1.1)" d="M0 0V-130M0-50H-30V-95M0-74H28V-120M0-30H40V-62"/>
+      <path class="mand" transform="translate(1255 782) scale(1.7)" d="M0 0V-130M0-50H-30V-95M0-74H28V-120"/>
+    </g>
+  </svg>
+
+  <div class="wrap hero-txt">
+    <p class="rot">Endocrinologia · Caruaru, Pernambuco</p>
+    <h1><span class="l"><span>Ciência,</span></span><span class="l"><span>tempo e <em>sotaque</em></span></span><span class="l"><span><em>do Agreste.</em></span></span></h1>
+    <p class="sub">Diabetes, tireoide, obesidade e saúde hormonal tratados com rigor científico e a calma de quem senta para ouvir a história inteira.</p>
+    <div class="acoes">
+      <a class="pill cheio mag" href="#agendar">Agendar consulta <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12 12 2M4 2h8v8"/></svg></a>
+      <a class="pill mag" href="#corpo">Explorar o corpo</a>
+    </div>
+  </div>
+  <div class="hora"><span>Caruaru <b id="relogio">--:--</b></span><span class="lbl" id="ceu-nome"></span><button id="ceu-btn" type="button" aria-label="Mudar a hora do céu">mudar o céu</button></div>
+</section>
+
+<div class="letreiro" aria-hidden="true"><div id="letras"></div></div>
+
+<section class="manifesto" id="manifesto">
+  <div class="wrap">
+    <p class="rot">Manifesto</p>
+    <p class="g" id="mani">Consulta não é corrida. Aqui a gente senta, escuta sua história inteira, examina com calma e decide junto — com a melhor evidência científica e o respeito de quem conhece o chão onde você pisa.</p>
+    <div class="numeros">
+      <div class="rv"><b>60 min</b><span>de primeira consulta. Tempo suficiente para não deixar pergunta sem resposta.</span></div>
+      <div class="rv"><b>1 plano</b><span>por escrito, em linguagem clara, com metas que cabem na sua rotina.</span></div>
+      <div class="rv"><b>0 modismo</b><span>Nada de “chip”, soro milagroso ou hormônio sem indicação. Só o que a ciência sustenta.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="areas" id="areas">
+  <div class="wrap">
+    <p class="rot">Áreas de atuação</p>
+    <h2 class="rv" style="margin-top:26px">O que passa <em>por aqui</em></h2>
+    <div class="lista" id="lista"></div>
+  </div>
+</section>
+
+<section class="corpo" id="corpo">
+  <div class="wrap">
+    <p class="rot">Atlas hormonal</p>
+    <h2 class="rv" style="margin-top:26px">Toque numa glândula. <em>Entenda o seu corpo.</em></h2>
+    <div class="gr">
+      <svg class="fig" viewBox="0 0 320 560" role="group" aria-label="Figura humana com as principais glândulas">
+        <circle class="tr" cx="160" cy="62" r="40"/>
+        <path class="tr" d="M146 100v16M174 100v16M92 140q68-30 136 0l10 170q-78 22-156 0zM92 140 60 290M228 140l32 150M118 322l-12 210M202 322l12 210M160 330v60"/>
+        <path class="tr eixo" d="M160 62V352"/>
+        <g id="gls"></g>
+      </svg>
+      <div class="painel" id="painel" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<section class="ferr" id="ferramentas">
+  <div class="wrap">
+    <p class="rot">Ferramentas</p>
+    <h2 class="rv" style="margin-top:26px">Números que <em>ajudam a conversar</em></h2>
+    <div class="gr">
+      <div class="cx rv">
+        <h3>Índice de massa corporal</h3><p>Um ponto de partida — nunca um veredito.</p>
+        <div class="campos">
+          <label>Peso (kg)<input id="peso" type="number" inputmode="decimal" value="78" min="20" max="350"></label>
+          <label>Altura (cm)<input id="alt" type="number" inputmode="numeric" value="170" min="100" max="230"></label>
+        </div>
+        <div class="saida"><b id="imc">27,0</b><span id="imc-c">Sobrepeso</span></div>
+        <div class="regua" aria-hidden="true"><i id="imc-m"></i></div>
+        <p class="nota">Classificação da OMS para adultos. O IMC não distingue músculo de gordura nem substitui a avaliação clínica.</p>
+      </div>
+      <div class="cx rv">
+        <h3>Hemoglobina glicada</h3><p>Converta sua HbA1c em glicemia média estimada.</p>
+        <label>HbA1c (%)<input id="a1c" type="number" inputmode="decimal" step="0.1" value="7.0" min="4" max="18"></label>
+        <div class="saida"><b id="gme">154</b><span>mg/dL de glicemia média estimada</span></div>
+        <div class="regua" aria-hidden="true" style="background:linear-gradient(90deg,var(--cacto) 0 22%,var(--sol) 22% 34%,var(--barro) 34% 60%,#7a2418 60%)"><i id="a1c-m"></i></div>
+        <p class="nota">Fórmula do estudo ADAG: GME = 28,7 × HbA1c − 46,7. A meta ideal é individual — converse com seu médico.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="agreste" id="agreste">
+  <div class="wrap gr">
+    <div>
+      <p class="rot">O Agreste</p>
+      <h2 class="rv" style="margin-top:26px">Perto de <em>casa.</em></h2>
+      <p class="t rv">Ninguém deveria pegar a BR-232 até o Recife para cuidar de uma tireoide. O consultório fica em Caruaru; a teleconsulta chega onde a estrada demora.</p>
+    </div>
+    <svg class="const rv" viewBox="0 0 640 420" role="img" aria-label="Mapa estilizado das cidades do Agreste ao redor de Caruaru"><g id="cid"></g></svg>
+  </div>
+</section>
+
+<section class="agendar" id="agendar">
+  <div class="wrap">
+    <p class="rot">Agendamento</p>
+    <h2 class="rv" style="margin-top:26px">Três toques e <em>está marcado.</em></h2>
+    <div class="conc">
+      <div id="passos"></div>
+      <aside class="recibo">
+        <h3>Seu pedido</h3>
+        <dl>
+          <div><dt>Motivo</dt><dd id="r-m">—</dd></div>
+          <div><dt>Formato</dt><dd id="r-f">—</dd></div>
+          <div><dt>Período</dt><dd id="r-p">—</dd></div>
+        </dl>
+        <a class="pill cheio mag" id="zap" href="#" target="_blank" rel="noopener">Enviar pelo WhatsApp <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12 12 2M4 2h8v8"/></svg></a>
+        <small>A equipe confirma o horário em seguida. Em urgências, procure o pronto-socorro.</small>
+      </aside>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="big">Até já, visse?</div>
+    <div class="cols">
+      <div><h5>Consultório</h5>Rua Exemplo, 123 — Centro<br>Caruaru, Pernambuco</div>
+      <div><h5>Contato</h5><a href="https://wa.me/5581900000000">(81) 90000-0000</a><br>contato@exemplo.com.br</div>
+      <div><h5>Atendimento</h5>Segunda a sexta, 8h às 18h<br>Presencial e teleconsulta</div>
+    </div>
+    <div class="fim"><span>Dr. Caíque Araújo · Endocrinologia e Metabologia · CRM-PE 00000 · RQE 0000</span><span>Conteúdo educativo. Não substitui consulta médica.</span></div>
+  </div>
+</footer>
+
+<script>
+document.documentElement.classList.add('js');
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fino = matchMedia('(pointer: fine)').matches;
+const ZAP = '5581900000000';
+const NS = 'http://www.w3.org/2000/svg';
+const svg = (tag, at = {}, txt) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (txt) e.textContent = txt; return e; };
+
+/* ---------- céu conforme a hora de Caruaru ---------- */
+const hero = $('#hero'), CEUS = ['aurora', 'dia', 'poente', 'noite'], NOMES = { aurora: 'amanhece no Agreste', dia: 'sol a pino', poente: 'o sol se põe na serra', noite: 'noite de céu limpo' };
+const agora = () => new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Recife', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
+const ceuDaHora = h => h >= 5 && h < 7 ? 'aurora' : h >= 7 && h < 16 ? 'dia' : h >= 16 && h < 18 ? 'poente' : 'noite';
+function setCeu(c) { hero.dataset.ceu = c; $('#ceu-nome').textContent = '· ' + NOMES[c]; document.querySelector('header').style.setProperty('--hero-tinta', getComputedStyle(hero).getPropertyValue('--hero-tinta')); }
+function tic() { $('#relogio').textContent = agora(); }
+tic(); setInterval(tic, 15000); setCeu(ceuDaHora(parseInt(agora(), 10)));
+$('#ceu-btn').onclick = () => setCeu(CEUS[(CEUS.indexOf(hero.dataset.ceu) + 1) % 4]);
+let sem = 7; const rnd = () => (sem = sem * 16807 % 2147483647) / 2147483647;
+for (let i = 0; i < 90; i++) $('#estrelas').append(svg('circle', { cx: rnd() * 1440, cy: rnd() * 560, r: rnd() * 1.6 + .4, opacity: rnd() * .8 + .2 }));
+
+/* ---------- paralaxe, cursor, botões magnéticos ---------- */
+if (fino && !calmo) {
+  hero.addEventListener('pointermove', e => { const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5; $$('.cam').forEach(g => { const p = +g.dataset.p; g.style.transform = `translate(${-x * p}px, ${-y * p * .5}px)`; }); });
+  const cur = $('#cur'); let cx = 0, cy = 0, tx = 0, ty = 0;
+  addEventListener('pointermove', e => { tx = e.clientX; ty = e.clientY; cur.classList.add('on'); cur.classList.toggle('big', !!e.target.closest('a, button, .gl, .item, .c')); });
+  (function anda() { cx += (tx - cx) * .2; cy += (ty - cy) * .2; cur.style.transform = `translate(${cx}px, ${cy}px)`; requestAnimationFrame(anda); })();
+  $$('.mag').forEach(b => { b.addEventListener('pointermove', e => { const r = b.getBoundingClientRect(); b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .25}px, ${(e.clientY - r.top - r.height / 2) * .35}px)`; }); b.addEventListener('pointerleave', () => b.style.transform = ''); });
+}
+
+/* ---------- letreiro ---------- */
+const temas = ['Diabetes', 'Tireoide', 'Obesidade', 'Colesterol', 'Osteoporose', 'Hipófise', 'Suprarrenais', 'Menopausa', 'Testosterona', 'SOP'];
+$('#letras').innerHTML = [...temas, ...temas].map(t => `<span>${t}</span><span>✦</span>`).join('');
+
+/* ---------- manifesto: palavras acendem com a rolagem ---------- */
+const mani = $('#mani'); mani.innerHTML = mani.textContent.split(' ').map(w => `<span class="w">${w}</span>`).join(' ');
+const ws = $$('.w', mani), prog = $('#prog'), hd = $('#topo-h');
+function rola() {
+  const max = document.documentElement.scrollHeight - innerHeight;
+  prog.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+  hd.classList.toggle('solido', scrollY > innerHeight - 90);
+  const r = mani.getBoundingClientRect(), t = Math.min(1, Math.max(0, (innerHeight * .85 - r.top) / (r.height + innerHeight * .35)));
+  ws.forEach((w, i) => w.classList.toggle('on', i / ws.length < t));
+}
+addEventListener('scroll', rola, { passive: true }); addEventListener('resize', rola); rola();
+
+/* ---------- áreas ---------- */
+const AREAS = [
+  ['Diabetes', 'Tipo 1, tipo 2, gestacional e pré-diabetes. Metas individualizadas, sensores de glicose, insulina sem medo.'],
+  ['Tireoide', 'Hipo e hipertireoidismo, tireoidites e nódulos — investigados com critério, sem exame de sobra.'],
+  ['Obesidade', 'Doença crônica tratada como tal: avaliação metabólica, medicação quando indicada, zero julgamento.'],
+  ['Colesterol', 'Dislipidemias e risco cardiovascular calculados para a sua vida, não para a média.'],
+  ['Ossos', 'Osteoporose, vitamina D e cálcio. Prevenir a fratura é melhor do que tratá-la.'],
+  ['Hormônios', 'Menopausa, SOP, testosterona, hipófise e suprarrenais. Reposição só com indicação real.']
+];
+$('#lista').innerHTML = AREAS.map(([t, d], i) => `<article class="item rv" tabindex="0"><span class="n">0${i + 1}</span><h3>${t}</h3><p>${d}</p><svg class="seta" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 21 21 5M8 5h13v13"/></svg></article>`).join('');
+
+/* ---------- atlas hormonal ---------- */
+const GL = [
+  { n: 'Hipófise', x: 160, y: 56, lx: 214, k: 'A maestrina', d: 'Do tamanho de uma ervilha, na base do cérebro, ela rege quase todas as outras glândulas: crescimento, tireoide, suprarrenais e reprodução.', t: ['Prolactina alta', 'Acromegalia', 'Deficiências hormonais', 'Adenomas'] },
+  { n: 'Tireoide', x: 160, y: 112, lx: 214, k: 'O acelerador', d: 'No pescoço, em forma de borboleta. Dita o ritmo do metabolismo: energia, temperatura, coração, intestino e humor.', t: ['Hipotireoidismo', 'Hipertireoidismo', 'Hashimoto', 'Nódulos'] },
+  { n: 'Suprarrenais', x: 132, y: 232, lx: 14, a: 'end', k: 'As sentinelas', d: 'Sobre cada rim, produzem cortisol, aldosterona e adrenalina — a resposta do corpo ao estresse e o controle da pressão.', t: ['Hipertensão de causa hormonal', 'Cushing', 'Insuficiência adrenal', 'Nódulos adrenais'] },
+  { n: 'Pâncreas', x: 176, y: 262, lx: 262, k: 'O guardião do açúcar', d: 'Fabrica a insulina, a chave que deixa a glicose entrar nas células. Quando falta ou não funciona bem, surge o diabetes.', t: ['Diabetes tipo 1', 'Diabetes tipo 2', 'Pré-diabetes', 'Hipoglicemias'] },
+  { n: 'Gônadas', x: 160, y: 352, lx: 214, k: 'As estações da vida', d: 'Ovários e testículos produzem estrogênio, progesterona e testosterona — puberdade, fertilidade, menopausa e muito mais.', t: ['Menopausa', 'SOP', 'Hipogonadismo', 'Puberdade'] }
+];
+const painel = $('#painel'), gls = $('#gls');
+function abre(i) {
+  const g = GL[i];
+  $$('.gl').forEach((e, j) => e.setAttribute('aria-pressed', j === i));
+  painel.innerHTML = `<p class="k">${g.k}</p><h3>${g.n}</h3><p>${g.d}</p><ul>${g.t.map(x => `<li>${x}</li>`).join('')}</ul>`;
+  painel.classList.remove('troca'); void painel.offsetWidth; painel.classList.add('troca');
+}
+GL.forEach((g, i) => {
+  const e = svg('g', { class: 'gl', role: 'button', tabindex: 0, 'aria-label': g.n, 'aria-pressed': false });
+  const h = svg('circle', { class: 'h', cx: g.x, cy: g.y, r: 7 }); h.style.animationDelay = i * .45 + 's';
+  e.append(svg('circle', { cx: g.x, cy: g.y, r: 22, fill: 'transparent' }), h, svg('circle', { class: 'p', cx: g.x, cy: g.y, r: 7 }),
+    svg('line', { x1: g.x, y1: g.y, x2: g.lx + (g.a ? 6 : -6), y2: g.y, stroke: 'rgba(243,233,214,.3)', 'stroke-width': .8 }),
+    svg('text', { x: g.lx, y: g.y + 4, 'text-anchor': g.a || 'start' }, g.n));
+  e.onclick = () => abre(i); e.onkeydown = ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); abre(i); } };
+  gls.append(e);
+});
+abre(1);
+
+/* ---------- ferramentas ---------- */
+const fmt = (n, d = 1) => n.toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+function imc() {
+  const p = +$('#peso').value, a = +$('#alt').value / 100; if (!(p > 0 && a > 0)) return;
+  const v = p / (a * a), c = v < 18.5 ? 'Abaixo do peso' : v < 25 ? 'Peso adequado' : v < 30 ? 'Sobrepeso' : v < 35 ? 'Obesidade grau I' : v < 40 ? 'Obesidade grau II' : 'Obesidade grau III';
+  $('#imc').textContent = fmt(v); $('#imc-c').textContent = c;
+  $('#imc-m').style.left = Math.min(100, Math.max(0, (v - 15) / 25 * 100)) + '%';   /* régua de 15 a 40 */
+}
+function a1c() {
+  const v = +$('#a1c').value; if (!(v >= 3 && v <= 20)) return;
+  $('#gme').textContent = Math.round(28.7 * v - 46.7);
+  $('#a1c-m').style.left = Math.min(100, Math.max(0, (v - 4.5) / 5.5 * 100)) + '%';   /* régua de 4,5 a 10 */
+}
+['peso', 'alt'].forEach(id => $('#' + id).addEventListener('input', imc)); $('#a1c').addEventListener('input', a1c); imc(); a1c();
+
+/* ---------- constelação do Agreste ---------- */
+const SEDE = [330, 215], CID = [['Bezerros', 420, 232], ['Gravatá', 520, 250], ['Toritama', 300, 130], ['Santa Cruz do Capibaribe', 215, 70], ['Surubim', 455, 85], ['Belo Jardim', 190, 235], ['Pesqueira', 70, 215], ['São Caetano', 262, 262], ['Garanhuns', 170, 372], ['Lajedo', 250, 330], ['Agrestina', 360, 300]];
+const cid = $('#cid');
+CID.forEach(([n, x, y]) => cid.append(svg('line', { x1: SEDE[0], y1: SEDE[1], x2: x, y2: y })));
+CID.forEach(([n, x, y]) => { const g = svg('g', { class: 'c' }); g.append(svg('circle', { cx: x, cy: y, r: 5 }), svg('text', { x: x + 12, y: y + 4 }, n)); cid.append(g); });
+const s = svg('g', { class: 'c sede' }); s.append(svg('circle', { class: 'anel', cx: SEDE[0], cy: SEDE[1], r: 10 }), svg('circle', { cx: SEDE[0], cy: SEDE[1], r: 10 }), svg('text', { x: SEDE[0] + 18, y: SEDE[1] - 12 }, 'Caruaru')); cid.append(s);
+
+/* ---------- concierge de agendamento ---------- */
+const PASSOS = [['m', '01 — O que traz você aqui?', ['Diabetes', 'Tireoide', 'Peso e metabolismo', 'Colesterol', 'Ossos', 'Hormônios', 'Ainda não sei']], ['f', '02 — Como prefere ser atendido?', ['Presencial em Caruaru', 'Teleconsulta']], ['p', '03 — Qual período é melhor?', ['Manhã', 'Tarde', 'Tanto faz']]];
+const esc = {};
+$('#passos').innerHTML = PASSOS.map(([k, t, o]) => `<div class="passo"><h4>${t}</h4><div class="chips" data-k="${k}">${o.map(x => `<button type="button" class="chip" aria-pressed="false">${x}</button>`).join('')}</div></div>`).join('');
+function recibo() {
+  PASSOS.forEach(([k]) => $('#r-' + k).textContent = esc[k] || '—');
+  const m = `Olá! Gostaria de agendar uma consulta com o Dr. Caíque.` + (esc.m ? `\nMotivo: ${esc.m}` : '') + (esc.f ? `\nFormato: ${esc.f}` : '') + (esc.p ? `\nPeríodo: ${esc.p}` : '');
+  $('#zap').href = `https://wa.me/${ZAP}?text=${encodeURIComponent(m)}`;
+}
+$('#passos').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; const g = b.parentNode; $$('.chip', g).forEach(c => c.setAttribute('aria-pressed', c === b)); esc[g.dataset.k] = b.textContent; recibo(); });
+recibo();
+
+/* ---------- revelar ao rolar ---------- */
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }), { threshold: .12 });
+$$('.rv').forEach((el, i) => { el.style.transitionDelay = (i % 3) * 80 + 'ms'; io.observe(el); });
+</script>
+</body>
+</html>
